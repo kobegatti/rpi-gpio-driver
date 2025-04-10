@@ -346,5 +346,6 @@ static void __exit gpio_driver_exit(void)
 module_init(gpio_driver_init);
 module_exit(gpio_driver_exit);
 
+MODULE_LICENSE("GPL");
 MODULE_DESCRIPTION("Test writing '0' or '1' to dev files on RASPI");
 MODULE_VERSION("1.0");
