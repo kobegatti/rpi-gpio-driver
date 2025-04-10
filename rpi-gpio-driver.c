@@ -216,7 +216,7 @@ static struct file_operations fops =
 };
 
 
-static void cleanUp(void)
+static void releaseResources(void)
 {
 	printk(KERN_INFO "\nRelease resources\n");
 
@@ -323,7 +323,7 @@ static int __init gpio_driver_init(void)
 		if (IS_ERR(my_devices[i]))
 		{
 			printk(KERN_ERR "Failed to create device: %s\n", device_name);
-			cleanUp();
+			releaseResources();
 			return PTR_ERR(my_devices[i]);
 		}
 
@@ -336,7 +336,7 @@ static int __init gpio_driver_init(void)
 
 static void __exit gpio_driver_exit(void)
 {
-	cleanUp();
+	releaseResources();
 
 	printk("Exiting rpi-gpio-driver!\n");
 
@@ -346,7 +346,5 @@ static void __exit gpio_driver_exit(void)
 module_init(gpio_driver_init);
 module_exit(gpio_driver_exit);
 
-MODULE_LICENSE("GPL");
-MODULE_AUTHOR("Kobe Gatti");
 MODULE_DESCRIPTION("Test writing '0' or '1' to dev files on RASPI");
 MODULE_VERSION("1.0");
