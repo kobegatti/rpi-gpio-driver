@@ -246,7 +246,7 @@ static int isValidGPIO(int pin)
 
 static int __init gpio_driver_init(void)
 {
-	printk(KERN_INFO "\nWelcome to dev-gpio-driver!\n");
+	printk(KERN_INFO "\nWelcome to rpi-gpio-driver!\n");
 
 	gpio_registers = (volatile uint32_t*)ioremap(GPIO_BASE_ADDRESS, PAGE_SIZE);
 	if (gpio_registers == NULL)
@@ -338,7 +338,7 @@ static void __exit gpio_driver_exit(void)
 {
 	cleanUp();
 
-	printk("Exiting dev-gpio-driver!\n");
+	printk("Exiting rpi-gpio-driver!\n");
 
 	return;
 }
