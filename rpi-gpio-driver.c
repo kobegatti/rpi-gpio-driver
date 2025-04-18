@@ -17,7 +17,7 @@ static volatile uint32_t* gpio_registers = NULL;
 static struct class* my_class;
 static struct device** my_devices;
 static int major = -1;
-const char* device_prefix = "led";
+static const char* device_prefix = "led";
 static char device_name[8] = ""; 
 
 // For each device
