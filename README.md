@@ -2,7 +2,7 @@
 Raspberry Pi 3
 
 opens/closes /dev files
-reads/writes "1" and "0" to GPIO pins 2 to 27.
+reads/writes "0" and "1" to GPIO pins 2 to 27.
 
 e.g.
 	make
