@@ -94,7 +94,7 @@ int openFile(const char* path, int flags)
 		exit(1);
 	}
 
-	printf("opened %s... fd: %d\n", path, fd);
+	printf("opened %s... fd: %d\n", path, ret);
 
 	return ret;
 }
