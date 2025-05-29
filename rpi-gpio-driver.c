@@ -1,7 +1,7 @@
 #include <asm/io.h>
 #include <linux/device.h>
 
-#define LLL_MAX_USER_SIZE 1024
+#define MAX_BUFFER_SIZE 1024
 
 // cat /proc/iomem | grep -i gpio
 #define GPIO_BASE_ADDRESS 0x3f200000 // RPi 3 Model B v1.2
@@ -14,20 +14,20 @@
 
 static volatile uint32_t* gpio_registers = NULL;
 
-static struct class* my_class;
-static struct device** my_devices;
+static struct class* my_class = NULL;
+static struct device** my_devices = NULL;
 static int major = -1;
 static const char* device_prefix = "led";
-static char device_name[8] = ""; 
+static char device_name[8] = {0}; 
 
 // For each device
 struct gpio_dev
 {
 	int gpio_pin;
-	char buffer[LLL_MAX_USER_SIZE]; 
+	char buffer[MAX_BUFFER_SIZE]; 
 };
 
-static int gpio_pins[32];
+static int gpio_pins[32] = {0};
 static int gpio_pins_count = 0;
 module_param_array(gpio_pins, int, &gpio_pins_count, 0444);
 MODULE_PARM_DESC(gpio_pins, "int array parameter for \"/dev/led<gpio_pin>\" files");
@@ -162,14 +162,14 @@ ssize_t dev_write(struct file* file, const char __user* user, size_t size, loff_
 	struct gpio_dev* gdev = file->private_data;
 	int gpio_pin = gdev->gpio_pin;
 	unsigned int value = UINT_MAX;
-	unsigned long ret;
+	unsigned long ret = 0;
 
 	// Clear buffer
 	memset(gdev->buffer, 0x0, sizeof(gdev->buffer));
 
-	if (size > LLL_MAX_USER_SIZE)
+	if (size > MAX_BUFFER_SIZE)
 	{
-		size = LLL_MAX_USER_SIZE;
+		size = MAX_BUFFER_SIZE;
 	}
 
 	ret = copy_from_user(gdev->buffer, user, size);
@@ -312,9 +312,9 @@ static int __init gpio_driver_init(void)
 
 		// copy const prefix to device_name
 		strncpy(device_name, device_prefix, sizeof(device_name));
-		size_t d_name_len = strlen(device_name);
+		size_t device_name_len = strlen(device_name);
 		// append pin number to device_name
-		snprintf(device_name + d_name_len, sizeof(device_name) - d_name_len, "%d", gpio_pins[i]);
+		snprintf(device_name + device_name_len, sizeof(device_name) - device_name_len, "%d", gpio_pins[i]);
 
 		printk(KERN_INFO "\ndevice_name: %s\n", device_name);
 
@@ -348,5 +348,5 @@ module_exit(gpio_driver_exit);
 
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("Low Level Learning");
-MODULE_DESCRIPTION("Test writing '0' or '1' to dev files on RASPI");
-MODULE_VERSION("1.0");
+MODULE_DESCRIPTION("open/close/read/write '0' or '1' to /dev files on RPI3");
+MODULE_VERSION("1.1");
