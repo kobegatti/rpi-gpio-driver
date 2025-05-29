@@ -15,6 +15,7 @@
 static int fd = 1;
 static const char* GPIO_DRIVER_PATH = "/dev/gpio";
 static char device_name[DEVICE_NAME_LEN] = "";
+const float sleep_len = 1.0f;
 
 
 /* Function Prototypes */
@@ -160,9 +161,9 @@ int main(int argc, char* argv[])
 	while (1)
 	{
 		offGPIO(fd);
-		sleep(1);
+		sleep(sleep_len);
 		onGPIO(fd);
-		sleep(1);
+		sleep(sleep_len);
 	}
 
 	return 0;

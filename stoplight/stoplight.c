@@ -16,14 +16,14 @@ static const char* DEV_PREFIX = "/dev/gpio";
 static char device_name[DEVICE_NAME_LEN] = "";
 static int* device_fds = NULL;
 static int num_fds = 0;
-const float sleep_len = 150000;
+const float sleep_len = 750000;
 
 
 // Function Protoypes
 void catchSignalAndExit(int sig);
 void cleanUp();
 int isValidGPIOPin(int pin);
-void ledRoutine1();
+void stoplightRoutine01();
 void OffGPIO(int fd);
 void OnGPIO(int fd);
 int openFile(const char* path, int flags);
@@ -79,31 +79,21 @@ int isValidGPIOPin(int pin)
 	return 1;
 }
 
-void ledRoutine1()
+void stoplightRoutine01()
 {
-	for (int i = 0; i < num_fds; ++i)
+	// start on "green" light
+	for (int i = 0; i < num_fds - 1; ++i)
 	{
 		OnGPIO(device_fds[i]);
 		usleep(sleep_len);
-	}
-
-	for (int i = 0; i < num_fds; ++i)
-	{
 		OffGPIO(device_fds[i]);
-		usleep(sleep_len);
 	}
 
-	for (int i = num_fds - 1; i >= 0; --i)
-	{
-		OnGPIO(device_fds[i]);
-		usleep(sleep_len);
-	}
-
-	for (int i = num_fds - 1; i >= 0; --i)
-	{
-		OffGPIO(device_fds[i]);
-		usleep(sleep_len);
-	}
+	// longer wait on "red" light
+	OnGPIO(device_fds[num_fds - 1]);
+	usleep(sleep_len);
+	usleep(sleep_len);
+	OffGPIO(device_fds[num_fds - 1]);
 }
 
 void OffGPIO(int fd)
@@ -210,7 +200,7 @@ int main(int argc, char* argv[])
 
 	while (1)
 	{
-		ledRoutine1();
+		stoplightRoutine01();
 	}
 
 	cleanUp();

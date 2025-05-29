@@ -1,7 +1,7 @@
 # Makefile for building the executable
 
 CC = gcc
-CFLAGS = -Wall -Wextra -Wpedantic -g -Werror -std=c99
+CFLAGS = -Wall -Wextra -Wpedantic -g -Werror
 
 # Set the default executable name if not provided
 EXEC = blinkLEDs

@@ -4,7 +4,7 @@ CC = gcc
 CFLAGS = -Wall -Wextra -Wpedantic -g -Werror
 
 # Set the default executable name if not provided
-EXEC = blinkLED
+EXEC = stoplight
 
 # List of source files (You can modify this list as needed)
 SRC = $(wildcard *.c)
