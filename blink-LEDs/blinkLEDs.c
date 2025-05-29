@@ -12,7 +12,7 @@
 
 
 // Global variables
-static const char* DEV_PREFIX = "/dev/led";
+static const char* DEV_PREFIX = "/dev/gpio";
 static char device_name[DEVICE_NAME_LEN] = "";
 static int* device_fds = NULL;
 static int num_fds = 0;

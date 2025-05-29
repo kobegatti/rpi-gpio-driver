@@ -19,7 +19,7 @@ static struct class* my_class = NULL;
 static struct device** my_devices = NULL;
 static int major = -1;
 
-static const char* device_prefix = "led";
+static const char* device_prefix = "gpio";
 static char device_name[8] = {0}; 
 
 // For each device
@@ -92,14 +92,14 @@ static int dev_open(struct inode* inode, struct file* file)
 
 	dev_t devt = MKDEV(major, minor);
 	struct device* dev = class_find_device(my_class, NULL, &devt, dev_match);
-	if (!dev) 
+	if (NULL == dev) 
 	{ 
 		printk(KERN_ERR "Device not found for devt %u:%u\n", MAJOR(devt), MINOR(devt));
 		return -ENODEV; 
 	}
 
 	struct gpio_dev* gdev = dev_get_drvdata(dev);
-	if (!gdev) 
+	if (NULL == gdev) 
 	{ 
 		printk(KERN_ERR "No drvdata associated with device\n");
 		return -EINVAL; 
@@ -140,7 +140,7 @@ ssize_t dev_read(struct file* file, char __user* user, size_t size, loff_t *off)
 	}
 
 	// Ensure to not read more data than available
-	if (size > len - *off)
+	if (size > (len - *off))
 	{
 		size = len - *off;
 	}
@@ -190,19 +190,19 @@ ssize_t dev_write(struct file* file, const char __user* user, size_t size, loff_
 		return size;	
 	}
 
-	if (value != 0 && value != 1)
+	if (0 != value && 1 != value)
 	{
-		printk(KERN_ERR "Invalid on(1)/off(0) value: %d entered\n", value);
+		printk(KERN_ERR "Invalid off(0)/on(1) value: %d entered\n", value);
 		return size;
 	}
 
-	if (value == 1)
-	{
-		gpioPinOn(gpio_pin);
-	}
-	else if (value == 0)
+	if (0 == value)
 	{
 		gpioPinOff(gpio_pin);
+	}
+	else if (1 == value)
+	{
+		gpioPinOn(gpio_pin);
 	}
 
 	return size;
@@ -350,5 +350,5 @@ module_exit(gpio_driver_exit);
 
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("Low Level Learning");
-MODULE_DESCRIPTION("open/close/read/write '0' or '1' to /dev files on RPI3");
+MODULE_DESCRIPTION("open/close/read/write '0' or '1' to /dev/gpio<pin> files on RPI3");
 MODULE_VERSION("1.1");

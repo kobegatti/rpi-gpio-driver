@@ -13,7 +13,7 @@
 
 // Global variables
 static int fd = 1;
-static const char* GPIO_DRIVER_DIR = "/dev/led";
+static const char* GPIO_DRIVER_PATH = "/dev/gpio";
 static char device_name[DEVICE_NAME_LEN] = "";
 
 
@@ -139,7 +139,7 @@ int main(int argc, char* argv[])
 		exit(1);
 	}
 
-	strncpy(device_name, GPIO_DRIVER_DIR, sizeof(device_name));
+	strncpy(device_name, GPIO_DRIVER_PATH, sizeof(device_name));
 	size_t len = strlen(device_name);
 
 	snprintf(device_name + len, sizeof(device_name) - len, "%d", pin);
