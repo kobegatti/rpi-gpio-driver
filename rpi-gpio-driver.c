@@ -1,22 +1,24 @@
 #include <asm/io.h>
 #include <linux/device.h>
 
+
 #define MAX_BUFFER_SIZE 1024
 
 // cat /proc/iomem | grep -i gpio
 #define GPIO_BASE_ADDRESS 0x3f200000 // RPi 3 Model B v1.2
 
-#define GPSET0_OFFSET 0x1c
-#define GPCLR0_OFFSET 0x28
+const short GPSET0_OFFSET = 0x1c;
+const short GPCLR0_OFFSET = 0x28;
 
-#define GPIO_MIN 2
-#define GPIO_MAX 27
+const short GPIO_MIN = 2;
+const short GPIO_MAX = 27;
 
 static volatile uint32_t* gpio_registers = NULL;
 
 static struct class* my_class = NULL;
 static struct device** my_devices = NULL;
 static int major = -1;
+
 static const char* device_prefix = "led";
 static char device_name[8] = {0}; 
 
@@ -47,7 +49,7 @@ static void gpioSetOutput(unsigned int pin)
 	printk(KERN_INFO "gpio_fsel(%p): 0x%X\n", (void*)gpio_fsel, *gpio_fsel);
 	*gpio_fsel &= ~(7 << (fsel_bitops * 3)); // clear pin's 3 FSEL bits
 	*gpio_fsel |= (1 << (fsel_bitops * 3)); // set LSB of 3 FSEL bits
-	printk(KERN_INFO "Updated gpio_fsel(%p): 0x%x\n", (void*)gpio_fsel, *gpio_fsel);
+	printk(KERN_INFO "Updated gpio_fsel(%p): 0x%X\n", (void*)gpio_fsel, *gpio_fsel);
 }
 
 static void gpioPinOn(unsigned int pin)
