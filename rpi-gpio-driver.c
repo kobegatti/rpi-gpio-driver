@@ -351,4 +351,4 @@ module_exit(gpio_driver_exit);
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("Low Level Learning");
 MODULE_DESCRIPTION("open/close/read/write '0' or '1' to /dev/gpio<pin> files on RPI3");
-MODULE_VERSION("1.1");
+MODULE_VERSION("1.2");
